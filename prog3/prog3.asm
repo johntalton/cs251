@@ -1,5 +1,4 @@
 ;John Talton
-;439-57-4799
 ;CS251
 ;Jan 98
 ;Plays with strings - revers Uper&Lower case
@@ -13,7 +12,7 @@
               db 'Q............Exit program',0dh,0ah,0dh,0ah,00h
    ThePrompt  db 'Enter your command:  ',00h   ;Enter a command
    StrPrompt  db 'Enter a string:  ',00h
-   TheCommand db ? 
+   TheCommand db ?
    SourceStr  db 80,81 dup(0)
    DestStr    db 80 dup(0), 00h
    Return     db 0dh,0ah, 00h
@@ -24,7 +23,7 @@ doMenu proc                  ;proc to print out string ending in NULL(00h)
        mov   si, dx
        push  dx
        mov   ah, 2
-    l1:mov   dx, [si]   
+    l1:mov   dx, [si]
        int   21h
        inc   si
        cmp   byte PTR [si], 00h
@@ -58,13 +57,13 @@ getStr proc               ;Gets a string of 80 char using a keybord buf
        ret
 getStr endp
 RevStr proc
-       push ax 
+       push ax
        push di
        push si
        mov  si, dx              ;copys offset of str to rev to si
        inc  si                  ;mov to index of str buf
        cmp  byte PTR [si],0     ;test to see if the str is empty
-       je   noStr0                
+       je   noStr0
        mov  al, byte PTR [si]   ;mov the num of char in str to al
        cbw                      ;convert byte 2 word al -> ax
        mov  cx,ax               ;cx is loop counter
@@ -73,7 +72,7 @@ RevStr proc
        add  di, cx              ;mov to end pos in the DestStr
        mov  byte PTR [di], 00h  ;put sentnal NULL for PrtStr proc
        sub  di,1                ;dec DestStr on space
-       rev:                     
+       rev:
        mov  al, [si]            ;mov char from source to dest
        mov  [di], al            ;  through reg al
        inc  si                  ;mov forward in source
@@ -84,7 +83,7 @@ RevStr proc
        mov  dx, offset Return   ;Print return
        call doMenu
        jmp  skipover0           ;skip over error mess
-       noStr0:                
+       noStr0:
        mov  dx, offset NoStrMes ;print out if no str
        call doMenu
        skipover0:
@@ -107,7 +106,7 @@ Up_Str proc
        inc   si
        mainup:
        cmp   byte PTR [si],96     ;check if lower that 'a'
-       jbe   notlower            
+       jbe   notlower
        cmp   byte PTR [si],122    ;check if greater that 'z'
        jae   notlower
        mov   al, byte PTR [si]    ;mov to DestStr
@@ -118,7 +117,7 @@ Up_Str proc
        mov   al, byte PTR [si]    ;no a lower case leter
        mov   byte PTR [di], al    ;  so just move to dest
        skip:
-       inc   di                   ;inc both 
+       inc   di                   ;inc both
        inc   si
        cmp   byte PTR [si], 0dh   ;if end of Source then exit
        jne   mainup
@@ -194,7 +193,7 @@ main proc
      mov   dx, offset ThePrompt
      call  doMenu
      call  getCmd                 ;Get command and check to see
-     cmp   TheCommand, 'U'        ;  if it is ULER else just 
+     cmp   TheCommand, 'U'        ;  if it is ULER else just
      je    doU                    ;  keep looping till Q
      cmp   TheCommand, 'L'
      je    doL
@@ -203,7 +202,7 @@ main proc
      cmp   TheCommand, 'R'
      je    doR
      cmp   TheCommand, 'Q'
-     je    mainend     
+     je    mainend
      jmp   mainloop
      doU:
      mov    dx, offset SourceStr  ;U callback
